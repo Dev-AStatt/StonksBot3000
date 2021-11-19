@@ -49,3 +49,4 @@ print(ltc_data.tail())
 
 # Debug function if you ever need to print the whole database
 #ltc_data.to_csv("DEBUG_History.csv", index = False)
+#Test
