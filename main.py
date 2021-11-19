@@ -1,20 +1,30 @@
 import datetime
 from pingAPI import *
 
-#---------------------------------#
-#                           StonkBot3000
-#   Created by Aaron Statt, Trey Chambers, and Benito Tijerina
-#
+#-----------------------------------------------------------------------------------------------------------#
+#                           StonkBot3000                                                                    #
+#   Created by Aaron Statt, Trey Chambers, and Benito Tijerina                                              #   
+#                                                                                                           #
+#   we have setup an API link to CoinAPI.io that compiles multiple exchanges and can return alot of         #
+#   coin data.  The API is free for hobby projects but only allows 100 queries per day.                     #
+#   For training we can export the queried data to a csv file, then read it over and over while testing.    #
+#                                                                                                           #
+#   The following code uses a pre-existing csv file (That is in the git dir)                                #
+#                                                                                                           #
+#-----------------------------------------------------------------------------------------------------------#
 
-retreveNewDataOnRun = False
+#   References:
+#   https://jamesgeorgedunn.com/2020/10/05/using-python-and-pandas-to-analyse-cryptocurrencies-with-coinapi/
+#   https://pandas.pydata.org/getting_started.html
+
 
 def number_to_day(number):
     days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
     return days[number]
 
 
-
-ltc_data = pandas.read_csv("LTC Day History before.csv")
+#ltc_data is a panda data structure that is kinda like an excel sheet
+ltc_data = pandas.read_csv("LTC_Day_History_FromAPI.csv")
 
 ltc_data.rename(columns = {
     "time_period_start": "Start Time",
@@ -32,37 +42,10 @@ ltc_data.rename(columns = {
 # Convert the Start Time to a date/time data type
 ltc_data["Start Time"] = pandas.to_datetime(ltc_data["Start Time"])
 
-# # Assign day of the week number (0, 1, 2, 3, 4, 5, 6)
-ltc_data["Day of the Week"] = ltc_data['Start Time'].datetime.dayofweek
-
-# # Convert number to the written day of the week
-ltc_data["Day of the Week"] = ltc_data["Day of the Week"].apply(number_to_day)
-
-# Drop columns as the Start Time is enough for my purposes
+# Drop columns of data we dont need
 ltc_data.drop(["End Time", "Open Time", "Close Time"], axis = "columns", inplace = True)
 
-reorder_columns = [
-    'Day of the Week',
-    'Start Time',
-    'Price Open',
-    'Price Close',
-    'Price High',
-    'Price Low',
-    'Volume Traded',
-    'Trade Count'
-]
-ltc_data = ltc_data.reindex(columns = reorder_columns)
+print(ltc_data.tail())
 
-# Create a CSV file with the values so not to waste the free daily API calls
-ltc_data.to_csv("LTC Day History.csv", index = False)
-
-
-
-df = pandas.read_csv("LTC Day History.csv")
-
-start_date = df["Start Time"] >= "2020-09-01"
-end_date = df["Start Time"] <= "2020-09-30"
-df[start_date & end_date]["Price High"].describe()["mean"]
-
-
-df[start_date & end_date]["Price High"].descr
+# Debug function if you ever need to print the whole database
+#ltc_data.to_csv("DEBUG_History.csv", index = False)

@@ -19,4 +19,4 @@ def pingAPI():
         ltc_data = pandas.DataFrame(coin_data)
         
         # Create a CSV file with the values so not to waste the free daily API calls
-        ltc_data.to_csv("LTC Day History before.csv", index = False)
+        ltc_data.to_csv("LTC_Day_History_FromAPI.csv", index = False)
