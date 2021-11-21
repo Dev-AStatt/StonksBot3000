@@ -5,8 +5,6 @@ from trades.tradeClass import *
 #Trade Manager Class used to hold all of the active trades at once
 #
 
-
-
 class tradeManager:
     _allTrades = []
 
