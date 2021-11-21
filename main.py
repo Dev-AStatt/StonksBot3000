@@ -1,6 +1,7 @@
 #im sorry this has to be dt, i hate doing it but for some reason calling it datetime doesn't work?????
 import datetime as dt
 from pingAPI import *
+from trades.tradeManager import *
 
 #-----------------------------------------------------------------------------------------------------------#
 #                                   StonkBot3000                                                            #
