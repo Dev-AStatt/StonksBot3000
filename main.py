@@ -1,5 +1,5 @@
 #im sorry this has to be dt, i hate doing it but for some reason calling it datetime doesn't work?????
-import datetime as dt
+from datetime import datetime
 from pingAPI import *
 from trades.tradeManager import *
 from util.table_import_refactor import *
@@ -32,6 +32,14 @@ ltc_data = refactorData(ltc_data)
 
 #this will print the first 5 enteries of the structure. Use .tail() to get the last 5
 print(ltc_data.head())
+
+#testing feature of adding a trade and printing an update
+trademan = tradeManager()
+#adding a new trade
+trademan.new_trade("BTC",6000,0.1,datetime.now())
+trademan.print_trades()
+
+
 
 # Debug function if you ever need to print the whole database
 #ltc_data.to_csv("DEBUG_History.csv", index = False)
