@@ -36,7 +36,7 @@ print(ltc_data.head())
 #testing feature of adding a trade and printing an update
 trademan = tradeManager()
 #adding a new trade
-trademan.new_trade("BTC",6000,0.1,datetime.now())
+trademan.new_trade("BTC",0.1,6000,datetime.now())
 trademan.print_trades()
 
 
