@@ -37,7 +37,7 @@ def main():
 
 
     #ltc_data is a panda data structure that is kinda like an excel sheet
-    ltc_data = pandas.read_csv("LTC_Day_History_FromAPI.csv")
+    ltc_data = pandas.read_csv("History_FromAPI.csv")
 
     ltc_data = refactorData(ltc_data)
 
