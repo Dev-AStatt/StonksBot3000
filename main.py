@@ -25,21 +25,24 @@ from util.table_import_refactor import *
 #   https://pandas.pydata.org/getting_started.html
 
 
-#ltc_data is a panda data structure that is kinda like an excel sheet
-ltc_data = pandas.read_csv("LTC_Day_History_FromAPI.csv")
 
-ltc_data = refactorData(ltc_data)
+def main():
+    #ltc_data is a panda data structure that is kinda like an excel sheet
+    ltc_data = pandas.read_csv("LTC_Day_History_FromAPI.csv")
 
-#this will print the first 5 enteries of the structure. Use .tail() to get the last 5
-print(ltc_data.head())
+    ltc_data = refactorData(ltc_data)
 
-#testing feature of adding a trade and printing an update
-trademan = tradeManager()
-#adding a new trade
-trademan.new_trade("BTC",0.1,6000,datetime.now())
-trademan.print_trades()
+    #this will print the first 5 enteries of the structure. Use .tail() to get the last 5
+    print(ltc_data.head())
 
+    #testing feature of adding a trade and printing an update
+    trademan = tradeManager()
+    #adding a new trade
+    trademan.new_trade("BTC",0.1,6000,datetime.now())
+    trademan.print_trades()
 
+if __name__ == '__main__':
+    main()
 
 # Debug function if you ever need to print the whole database
 #ltc_data.to_csv("DEBUG_History.csv", index = False)
