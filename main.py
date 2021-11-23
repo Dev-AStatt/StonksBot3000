@@ -27,6 +27,15 @@ from util.table_import_refactor import *
 
 
 def main():
+    #do not flag this as true unless you want to ping the API
+    get_Historical_Data = False
+
+    if(get_Historical_Data):
+        api = CoinAPI__Interface()
+        api.get_historical_data_and_save_csv("LTC/USD", "1HRS", "2020-01-01T00:00:00", "2021-10-31T23:59:00","100000")
+        print("Sucsessful?")
+
+
     #ltc_data is a panda data structure that is kinda like an excel sheet
     ltc_data = pandas.read_csv("LTC_Day_History_FromAPI.csv")
 
@@ -35,7 +44,7 @@ def main():
     #this will print the first 5 enteries of the structure. Use .tail() to get the last 5
     print(ltc_data.head())
 
-    #testing feature of adding a trade and printing an update
+    #testing feature of adding a trade and printing update
     trademan = tradeManager()
     #adding a new trade
     trademan.new_trade("BTC",0.1,6000,datetime.now())

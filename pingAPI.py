@@ -2,7 +2,7 @@ import json
 import requests
 import pandas
 
-def pingAPI():
+def old_Do_Not_Use_pingAPI():
     api_key = "Empty API Key"
     url = "https://rest.coinapi.io/v1/ohlcv/LTC/GBP/history?period_id=1DAY&time_start=2015-01-01T00:00:00&time_end=2020-10-31T23:59:00&limit=100000"
     headers = {"X-CoinAPI-Key" : api_key}
@@ -21,39 +21,72 @@ def pingAPI():
         # Create a CSV file with the values so not to waste the free daily API calls
         ltc_data.to_csv("LTC_Day_History_FromAPI.csv", index = False)
 
-class CoinAPI_Interface():
-    
-    base_url = 'https://rest.coinapi.io/v1ohlcv/'
-    headers = {'X-CoinAPI-Key' : 'Empty-API-Key'}
+class CoinAPI__Interface():
 
-    def _get_response(self,url):
-        return requests.get(url, headers=headers)
+    SANDBOX_base_url = 'https://rest-sandbox.coinapi.io/v1/ohlcv/'
+    PRODUCTION_base_url = 'https://rest.coinapi.io/v1/ohlcv/'
+    headers = {'X-CoinAPI-Key' : 'Place_API_KEY_HERE'}
 
     def get_periods(self):
         """Get full list of supported time periods availabe for requesting OHLCV data"""
         url = 'https://rest.coinapi.io/v1/ohlcv/periods'
-        self._get_response(url,self.headers)
+        #self._get_response(url,self.headers)
 
-     def get_latest_data(self, symbol_id, period, limit):
-        """ note """
+    def _get_response(self,url):
+        response = requests.get(url, headers=self.headers)
+        #Check if API responds any Errors
+        if(response.status_code == 429):
+            print("Too many requests.")
+        if(response.status_code == 401):
+            print("Unauthorized -- Your API Key is wrong")
+        if(response.status_code == 400):
+            print("Bad Request -- There is something wrong with your request")
+        if(response.status_code == 403):
+            print("Forbidden -- Your API key doesn't have enough privilages to access this resource")
+        if(response.status_code == 550):
+            print("No data -- You requested specific single item that we don't have at this moment")
+
+        else:
+            # Get the information from the API
+            coin_data  = json.loads(response.text)
+            # Assign information to a DataFrame for later use
+            data = pandas.DataFrame(coin_data)
+            #Return data returned from api as pandas dataframe
+            return data
+
+    def get_latest_sandbox_data(self, symbol_id, period, limit):
+        """Sandbox Interface with Coin API"""
+        #he sandbox environment is provided for development and non-production use-cases, it has few differences in comparison to the production one:
+        #   You still need active API Key to access the sandbox; it can be a free one.
+        #   We do not provide any support or SLA for this environment.
+        #   You cant query for the historical data more than one day back.
+        #   The limit parameter default and the maximum value is set to 10.
+        #   Real-time and historical data is limited to specific data sources: COINBASE, GEMINI, testnets, UAT environments and ECB (European Central Bank).
+        #   Data could be invalid/fake or delayed.
+        #   API changes could be visible faster on the sandbox than in the production environment.
         #GET /v1/ohlcv/{symbol_id}/latest?period_id={period_id}&limit={limit}&include_empty_items={include_empty_items}
 
         # putting together the url for request
-        url = self.base_url + symbol_id
+        url = self.SANDBOX_base_url + symbol_id
         url = url + '/latest?period_id=' + period
         url = url + '&limit=' + limit
         url = url + '&include_empty_items={include_empty_items}'
-        return _get_response(url)
+        return self._get_response(url)
 
-    def get_historical_data(self, symbol_id, period, time_start, time_end, limit):
-        """Get historical data """
+    def _get_historical_data(self, symbol_id, period, time_start, time_end, limit):
+        """Private Method Get historical data """
         #GET /v1/ohlcv/{symbol_id}/history?period_id={period_id}&time_start={time_start}&time_end={time_end}&limit={limit}&include_empty_items={include_empty_items}
-        url = self.base_url + symbol_id
-        url = url + '/history?period_id=' + period_id
+        url = self.PRODUCTION_base_url + symbol_id
+        url = url + '/history?period_id=' + period
         url = url + '&time_start=' + time_start
         url = url + '&time_end=' + time_end
         url = url + '&limit=' + limit
-        url = url + '&include_empty_items={include_empty_items}'
-        return _get_response(url)
+        return self._get_response(url)
 
-        
+    def get_historical_data_and_save_csv(self, symbol_id, period, time_start, time_end, limit):
+        """method will call api for historical data and save to csv for training"""
+        #get historical data from historical data method
+        historical_data = self._get_historical_data(symbol_id,period, time_start, time_end, limit)            # Create a CSV file with the values so not to waste the free daily API calls
+        historical_data.to_csv("History_FromAPI.csv", index = False)
+
+
