@@ -2,7 +2,7 @@
 from datetime import datetime
 from pingAPI import *
 from trades.tradeManager import *
-from util.table_import_refactor import *
+from training.trainingAPI import *
 
 #-----------------------------------------------------------------------------------------------------------#
 #                                   StonkBot3000                                                            #
@@ -35,19 +35,17 @@ def main():
         api.get_historical_data_and_save_csv("LTC/USD", "1HRS", "2020-01-01T00:00:00", "2021-10-31T23:59:00","100000")
         print("Sucsessful?")
 
-
-    #ltc_data is a panda data structure that is kinda like an excel sheet
-    ltc_data = pandas.read_csv("History_FromAPI.csv")
-
-    ltc_data = refactorData(ltc_data)
-
     #this will print the first 5 enteries of the structure. Use .tail() to get the last 5
-    print(ltc_data.head())
+    #print(ltc_data.head())
 
+    #load training data
+    training = training_API(True)
+    training.update_ticker_data("LTC/USD")
+    training.update_ticker_data("LTC/USD")
     #testing feature of adding a trade and printing update
     trademan = tradeManager()
     #adding a new trade
-    trademan.new_trade("BTC",0.1,6000,datetime.now())
+    trademan.new_trade("LTC",0.1,6000,datetime.now())
     trademan.print_trades()
 
 if __name__ == '__main__':
