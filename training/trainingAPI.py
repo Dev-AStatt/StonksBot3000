@@ -1,4 +1,3 @@
-import json
 import pandas as pd
 import os.path
 from util.table_import_refactor import *
@@ -47,9 +46,13 @@ class training_API():
         #re-calculate the moving average for the additional entery
         self.active_chart_1h['100ta'] = self.active_chart_1h['Price Close'].rolling(window=100, min_periods=0).mean()
         #Now refactor to get a 1 day dataframe from the 1h frame
-        #
+        #self.active_chart_1h.set_index(['Start Time'])
+        self.active_chart_1h['Start Time'] = pd.to_datetime(self.active_chart_1h['Start Time'])
         #   This isnt working
-        #self.active_chart_1d_ohlc = self.active_chart_1h['Price Close'].resample('1D').ohlc()
+        #self.active_chart_1h.to_csv("_csv_files/History_Debug.csv")
+        print(self.active_chart_1h.head())
+        #self.active_chart_1d_ohlc = self.active_chart_1h['Price Close'].resample('1D', on="Start Time").ohlc()
+        #self.active_chart_1d_ohlc = self.active_chart_1h.resample('1D')
         print(self.active_chart_1d_ohlc)
         
     def print_current_update(self):

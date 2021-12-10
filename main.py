@@ -34,7 +34,7 @@ def main():
     #do not flag this as true unless you want to ping the API
     get_Historical_Data = False
     run_training_simulation = True
-    display_graphs = True
+    display_graphs = False
     if(get_Historical_Data):
         api = CoinAPI__Interface()
         api.get_historical_data_and_save_csv("LTC/USD", "1HRS", "2020-01-01T00:00:00", "2021-10-31T23:59:00","100000")

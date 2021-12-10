@@ -1,5 +1,5 @@
 from trades.tradeClass import *
-
+from util.supported_coins import *
 #Trade Manager Class
 #
 #Trade Manager Class used to hold all of the active trades at once
@@ -8,6 +8,7 @@ from trades.tradeClass import *
 class tradeManager:
     _allTrades = []
 
+        #add instatiation crap here
     
     def new_trade(self, tracker, bought,amount, date):
         #add new trade to list
@@ -28,3 +29,12 @@ class tradeManager:
             for trade in self._allTrades:
                 trade.print_trade()
 
+
+
+
+class Active_Dataframe:
+    df_active_chart_1h = []
+
+    def update_active_charts(self, symbol, new_df_row):
+        """function accepts a new row of dataframe from api and appends it to active data charts"""
+        if(symbol =  
