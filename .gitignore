@@ -1,4 +1,5 @@
 __pycache__/
 /pycache/*
+/_csv_files/*
 *.pyc
 config.py
